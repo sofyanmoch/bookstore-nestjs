@@ -2,7 +2,7 @@
 import { Controller, Get, Res, HttpStatus, Param, NotFoundException, Post, Body, Query, Put, Delete } from '@nestjs/common';
 import { BlogService } from './blog.service'
 import { CreatePostDTO } from './dto/create-post.dto'
-import { ValidateObjectId } from '../shared/pipes/validate-object-id.pipes'
+import { ValidateObjectId } from './shared/pipes/validate-object-id.pipes'
 import { POINT_CONVERSION_HYBRID } from 'constants';
 
 
@@ -36,7 +36,7 @@ export class BlogController {
     @Put('/edit')
     async editPost(
         @Res() res,
-        @Query('postID', new ValidateObjectId()) POINT_CONVERSION_HYBRID,
+        @Query('postID', new ValidateObjectId()) postID,
         @Body() createPostDTO: CreatePostDTO
     ) {
         const editedPost = await this.blogService.editPost(postID, createPostDTO)
@@ -50,7 +50,7 @@ export class BlogController {
     @Delete('/delete')
     async deletePost(@Res() res, @Query('postID', new ValidateObjectId()) postID) {
         const deletedPost = await this.blogService.deletePost(postID)
-        if(!deletedPost) throw NotFoundException('Post does not exist!')
+        if(!deletedPost) throw new NotFoundException('Post does not exist!')
         return res.status(HttpStatus.OK).json({
             message: 'Post has been deleted!',
             post: deletedPost
