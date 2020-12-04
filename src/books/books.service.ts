@@ -24,10 +24,10 @@ export class BooksService {
   }
   // add book
   addBook(book): Promise<any> {
-    return new Promise(resolve => [
+    return new Promise(resolve => {
       this.books.push(book)
       resolve(this.books)
-    ])
+    })
   }
   //delete book
   deleteBook(bookID): Promise<any> {
@@ -35,7 +35,7 @@ export class BooksService {
     return new Promise(resolve => {
       let index = this.books.findIndex(book => book.id === id)
       if(index === -1 ){
-        thow new HttpException('Books not exist!', 404)
+        throw new HttpException('Books not exist!', 404)
       }
       this.books.splice(1, index)
       resolve(this.books)
